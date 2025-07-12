@@ -30,7 +30,11 @@ async function loadLourdesGrottos() {
                     <p><strong>Straat:</strong> ${grotto.straat}</p>
                     ${grotto.info ? `<p><strong>Info:</strong> ${grotto.info}</p>` : ''}
                     <p><strong>Categorie:</strong> <span class="categorie ${grotto.categorie.toLowerCase()}">${grotto.categorie}</span></p>
-                    ${grotto.bestandsnaam ? `<p><strong>Afbeelding:</strong> ${grotto.bestandsnaam}</p>` : ''}
+                    ${grotto.bestandsnaam ? `
+                        <div class="image-container">
+                            <img src="static/thumbnail/${grotto.bestandsnaam}" alt="Lourdesgrot ${grotto.locatie}" class="grotto-image" />
+                        </div>
+                    ` : ''}
                 </div>
             `;
             
