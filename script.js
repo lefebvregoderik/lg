@@ -32,7 +32,9 @@ async function loadLourdesGrottos() {
                     <p><strong>Categorie:</strong> <span class="categorie ${grotto.categorie.toLowerCase()}">${grotto.categorie}</span></p>
                     ${grotto.bestandsnaam ? `
                         <div class="image-container">
-                            <img src="static/thumbnail/${grotto.bestandsnaam}" alt="Lourdesgrot ${grotto.locatie}" class="grotto-image" />
+                            <a href="static/1024x1024/${grotto.bestandsnaam}" target="_blank">
+                                <img src="static/thumbnail/${grotto.bestandsnaam}" alt="Lourdesgrot ${grotto.locatie}" class="grotto-image" />
+                            </a>
                         </div>
                     ` : ''}
                 </div>
