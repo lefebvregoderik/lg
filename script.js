@@ -79,7 +79,7 @@ async function loadLourdesGrottos() {
         containerElement.insertBefore(summary, containerElement.firstChild);
         
         // Create province links
-        createProvinceLinks(grottos, provincieFilter);
+        createProvinceLinks(provincieFilter);
         
         // Create lightbox
         createLightbox();
@@ -91,7 +91,11 @@ async function loadLourdesGrottos() {
 }
 
 // Create province links in sidebar
-function createProvinceLinks(allGrottos, currentFilter) {
+async function createProvinceLinks(currentFilter) {
+    // Fetch all grottos data for province links
+    const response = await fetch('lg.json');
+    const allGrottos = await response.json();
+    
     const provinceLinksContainer = document.getElementById('province-links');
     
     // Get unique provinces and count grottos per province
