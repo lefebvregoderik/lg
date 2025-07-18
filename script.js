@@ -32,9 +32,11 @@ async function loadLourdesGrottos() {
                     <p><strong>Categorie:</strong> <span class="categorie ${grotto.categorie.toLowerCase()}">${grotto.categorie}</span></p>
                     ${grotto.bestandsnaam ? `
                         <div class="image-container">
-                            <a href="static/1024x1024/${grotto.bestandsnaam}">
-                                <img src="static/thumbnail/${grotto.bestandsnaam}" alt="Lourdesgrot ${grotto.locatie}" class="grotto-image" />
-                            </a>
+                            <img src="static/thumbnail/${grotto.bestandsnaam}" 
+                                 alt="Lourdesgrot ${grotto.locatie}" 
+                                 class="grotto-image" 
+                                 data-large-src="static/1024x1024/${grotto.bestandsnaam}"
+                                 onclick="openLightbox(this)" />
                         </div>
                     ` : ''}
                 </div>
@@ -54,11 +56,61 @@ async function loadLourdesGrottos() {
         
         containerElement.insertBefore(summary, containerElement.firstChild);
         
+        // Create lightbox
+        createLightbox();
+        
     } catch (error) {
         loadingElement.innerHTML = `<p style="color: red;">Fout bij het laden van gegevens: ${error.message}</p>`;
         console.error('Error loading data:', error);
     }
 }
+
+// Create lightbox HTML
+function createLightbox() {
+    const lightbox = document.createElement('div');
+    lightbox.className = 'lightbox';
+    lightbox.id = 'lightbox';
+    lightbox.innerHTML = `
+        <div class="lightbox-content">
+            <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+            <img class="lightbox-image" id="lightbox-image" src="" alt="" />
+        </div>
+    `;
+    document.body.appendChild(lightbox);
+    
+    // Close lightbox when clicking outside the image
+    lightbox.addEventListener('click', function(e) {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+}
+
+// Open lightbox with image
+function openLightbox(imgElement) {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    
+    lightboxImage.src = imgElement.dataset.largeSrc;
+    lightboxImage.alt = imgElement.alt;
+    
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevent scrolling
+}
+
+// Close lightbox
+function closeLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    lightbox.classList.remove('active');
+    document.body.style.overflow = ''; // Restore scrolling
+}
+
+// Close lightbox with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeLightbox();
+    }
+});
 
 // Load data when page is ready
 document.addEventListener('DOMContentLoaded', loadLourdesGrottos);
