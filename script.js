@@ -92,9 +92,51 @@ async function loadLourdesGrottos() {
 
 // Create province links in sidebar
 async function createProvinceLinks(currentFilter) {
-    // Fetch all grottos data for province links
-    const response = await fetch('lg.json');
-    const allGrottos = await response.json();
+    try {
+        // Fetch all grottos data for province links
+        const response = await fetch('lg.json');
+        const allGrottos = await response.json();
+        
+        const provinceLinksContainer = document.getElementById('province-links');
+        
+        // Clear existing links
+        provinceLinksContainer.innerHTML = '';
+        
+        // Get unique provinces and count grottos per province
+        const provinceData = {};
+        allGrottos.forEach(grotto => {
+            if (!provinceData[grotto.provincie]) {
+                provinceData[grotto.provincie] = 0;
+            }
+            provinceData[grotto.provincie]++;
+        });
+        
+        // Sort provinces alphabetically
+        const sortedProvinces = Object.keys(provinceData).sort();
+        
+        // Add province links
+        sortedProvinces.forEach(provincie => {
+            const listItem = document.createElement('li');
+            const link = document.createElement('a');
+            
+            link.href = `?provincie=${encodeURIComponent(provincie)}`;
+            link.innerHTML = `${provincie} <span class="province-count">(${provinceData[provincie]})</span>`;
+            
+            // Set active state
+            if (currentFilter && currentFilter.toLowerCase() === provincie.toLowerCase()) {
+                link.classList.add('active');
+            }
+            
+            listItem.appendChild(link);
+            provinceLinksContainer.appendChild(listItem);
+        });
+        
+        console.log('Province links created:', sortedProvinces.length);
+        
+    } catch (error) {
+        console.error('Error creating province links:', error);
+    }
+}</parameter>
     
     const provinceLinksContainer = document.getElementById('province-links');
     
