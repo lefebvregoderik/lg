@@ -11,7 +11,18 @@ async function loadLourdesGrottos() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        const grottos = await response.json();
+        let grottos = await response.json();
+        
+        // Check for provincie query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const provincieFilter = urlParams.get('provincie');
+        
+        // Filter grottos if provincie parameter is provided
+        if (provincieFilter) {
+            grottos = grottos.filter(grotto => 
+                grotto.provincie.toLowerCase() === provincieFilter.toLowerCase()
+            );
+        }
         
         // Hide loading message
         loadingElement.style.display = 'none';
@@ -48,11 +59,22 @@ async function loadLourdesGrottos() {
         // Add summary information
         const summary = document.createElement('div');
         summary.className = 'summary';
-        summary.innerHTML = `
-            <h2>Samenvatting</h2>
-            <p>Totaal aantal grotten: <strong>${grottos.length}</strong></p>
-            <p>Provincies: <strong>${[...new Set(grottos.map(g => g.provincie))].length}</strong></p>
-        `;
+        
+        let summaryContent = `<h2>Samenvatting</h2>`;
+        
+        if (provincieFilter) {
+            summaryContent += `
+                <p>Gefilterd op provincie: <strong>${provincieFilter}</strong></p>
+                <p>Aantal grotten in ${provincieFilter}: <strong>${grottos.length}</strong></p>
+            `;
+        } else {
+            summaryContent += `
+                <p>Totaal aantal grotten: <strong>${grottos.length}</strong></p>
+                <p>Provincies: <strong>${[...new Set(grottos.map(g => g.provincie))].length}</strong></p>
+            `;
+        }
+        
+        summary.innerHTML = summaryContent;
         
         containerElement.insertBefore(summary, containerElement.firstChild);
         
