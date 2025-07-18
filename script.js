@@ -110,17 +110,6 @@ async function createProvinceLinks(currentFilter) {
     // Sort provinces alphabetically
     const sortedProvinces = Object.keys(provinceData).sort();
     
-    // Update "Alle provincies" link
-    const allLink = document.getElementById('all-link');
-    allLink.innerHTML = `Alle provincies <span class="province-count">(${allGrottos.length})</span>`;
-    
-    // Set active state for "Alle provincies"
-    if (!currentFilter) {
-        allLink.classList.add('active');
-    } else {
-        allLink.classList.remove('active');
-    }
-    
     // Add province links
     sortedProvinces.forEach(provincie => {
         const listItem = document.createElement('li');
