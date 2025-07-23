@@ -84,7 +84,7 @@ async function loadLourdesGrottos() {
         containerElement.insertBefore(summary, containerElement.firstChild);
         
         // Create province links
-        createProvinceLinks(provincieFilter);
+        await createProvinceLinks(provincieFilter);
         
         // Update navigation state
         updateNavigationState(null);
@@ -194,7 +194,19 @@ document.addEventListener('keydown', function(e) {
 });
 
 // Load data when page is ready
-document.addEventListener('DOMContentLoaded', loadLourdesGrottos);
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if there's a provincie parameter in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const provincieFilter = urlParams.get('provincie');
+    
+    if (provincieFilter) {
+        // If provincie parameter exists, load grottos
+        loadLourdesGrottos();
+    } else {
+        // Otherwise, show Over ons page as default
+        showPageContent(1);
+    }
+});
 
 // Add event listeners for navigation
 document.addEventListener('DOMContentLoaded', function() {
@@ -247,6 +259,9 @@ async function showPageContent(pageId) {
         
         // Update active navigation state
         updateNavigationState('over-ons');
+        
+        // Create province links for sidebar
+        await createProvinceLinks();
         
     } catch (error) {
         loadingElement.innerHTML = `<p style="color: red;">Fout bij het laden van de pagina: ${error.message}</p>`;
