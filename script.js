@@ -2,8 +2,13 @@
 async function loadLourdesGrottos() {
     const loadingElement = document.getElementById('loading');
     const containerElement = document.getElementById('data-container');
+    const pageContentElement = document.getElementById('page-content');
     
     try {
+        // Hide page content when loading grottos
+        pageContentElement.style.display = 'none';
+        containerElement.style.display = 'grid';
+        
         // Fetch the JSON data
         const response = await fetch('lg.json');
         
@@ -80,6 +85,9 @@ async function loadLourdesGrottos() {
         
         // Create province links
         createProvinceLinks(provincieFilter);
+        
+        // Update navigation state
+        updateNavigationState(provincieFilter ? null : 'alle-grotten');
         
         // Create lightbox
         createLightbox();
@@ -187,3 +195,85 @@ document.addEventListener('keydown', function(e) {
 
 // Load data when page is ready
 document.addEventListener('DOMContentLoaded', loadLourdesGrottos);
+
+// Add event listeners for navigation
+document.addEventListener('DOMContentLoaded', function() {
+    const overOnsLink = document.getElementById('over-ons-link');
+    const alleGrottenLink = document.getElementById('alle-grotten-link');
+    
+    overOnsLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        showPageContent(1);
+    });
+    
+    alleGrottenLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        // Remove any query parameters and reload
+        window.location.href = window.location.pathname;
+    });
+});
+
+// Function to fetch and display page content
+async function showPageContent(pageId) {
+    const loadingElement = document.getElementById('loading');
+    const containerElement = document.getElementById('data-container');
+    const pageContentElement = document.getElementById('page-content');
+    
+    try {
+        // Show loading
+        loadingElement.style.display = 'block';
+        loadingElement.textContent = 'Pagina laden...';
+        
+        // Hide grotto data
+        containerElement.style.display = 'none';
+        
+        // Fetch page data
+        const response = await fetch('page.json');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const pages = await response.json();
+        const page = pages.find(p => p.id === pageId);
+        
+        if (!page) {
+            throw new Error(`Pagina met ID ${pageId} niet gevonden`);
+        }
+        
+        // Hide loading
+        loadingElement.style.display = 'none';
+        
+        // Show page content
+        pageContentElement.innerHTML = `
+            <div class="page-content">
+                <div class="page-text">${page.pagina}</div>
+            </div>
+        `;
+        pageContentElement.style.display = 'block';
+        
+        // Update active navigation state
+        updateNavigationState('over-ons');
+        
+    } catch (error) {
+        loadingElement.innerHTML = `<p style="color: red;">Fout bij het laden van de pagina: ${error.message}</p>`;
+        console.error('Error loading page content:', error);
+    }
+}
+
+// Function to update navigation active state
+function updateNavigationState(activeItem) {
+    const navLinks = document.querySelectorAll('.navigation-links a');
+    const provinceLinks = document.querySelectorAll('.province-links a');
+    
+    // Remove active class from all links
+    navLinks.forEach(link => link.classList.remove('active'));
+    provinceLinks.forEach(link => link.classList.remove('active'));
+    
+    // Add active class to current item
+    if (activeItem === 'over-ons') {
+        document.getElementById('over-ons-link').classList.add('active');
+    } else if (activeItem === 'alle-grotten') {
+        document.getElementById('alle-grotten-link').classList.add('active');
+    }
+}

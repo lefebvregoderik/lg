@@ -82,6 +82,39 @@ main {
     padding-bottom: 0.5rem;
 }
 
+.navigation-links {
+    list-style: none;
+    margin-bottom: 2rem;
+}
+
+.navigation-links li {
+    margin-bottom: 0.5rem;
+}
+
+.navigation-links a {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: #555;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+    font-weight: 500;
+    border: 2px solid transparent;
+}
+
+.navigation-links a:hover {
+    background-color: #667eea;
+    color: white;
+    transform: translateX(4px);
+}
+
+.navigation-links a.active {
+    background-color: #667eea;
+    color: white;
+    border-color: #5a67d8;
+}
+
 .province-links {
     list-style: none;
 }
@@ -354,4 +387,35 @@ main {
 
 .grotto-image {
     cursor: pointer;
+}
+
+/* Page content styles */
+.page-content {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+    border-left: 4px solid #667eea;
+}
+
+.page-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #444;
+}
+
+.page-text p {
+    margin-bottom: 1.5rem;
+}
+
+.page-text a {
+    color: #667eea;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-bottom-color 0.2s ease;
+}
+
+.page-text a:hover {
+    border-bottom-color: #667eea;
 }
