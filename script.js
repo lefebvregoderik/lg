@@ -87,7 +87,7 @@ async function loadLourdesGrottos() {
         createProvinceLinks(provincieFilter);
         
         // Update navigation state
-        updateNavigationState(provincieFilter ? null : 'alle-grotten');
+        updateNavigationState(null);
         
         // Create lightbox
         createLightbox();
@@ -199,17 +199,10 @@ document.addEventListener('DOMContentLoaded', loadLourdesGrottos);
 // Add event listeners for navigation
 document.addEventListener('DOMContentLoaded', function() {
     const overOnsLink = document.getElementById('over-ons-link');
-    const alleGrottenLink = document.getElementById('alle-grotten-link');
     
     overOnsLink.addEventListener('click', function(e) {
         e.preventDefault();
         showPageContent(1);
-    });
-    
-    alleGrottenLink.addEventListener('click', function(e) {
-        e.preventDefault();
-        // Remove any query parameters and reload
-        window.location.href = window.location.pathname;
     });
 });
 
@@ -273,7 +266,5 @@ function updateNavigationState(activeItem) {
     // Add active class to current item
     if (activeItem === 'over-ons') {
         document.getElementById('over-ons-link').classList.add('active');
-    } else if (activeItem === 'alle-grotten') {
-        document.getElementById('alle-grotten-link').classList.add('active');
     }
 }
